@@ -1,41 +1,38 @@
 class Calculadora:
-    _registrador = 0
-    _anterior = 0
-    
-    @classmethod
-    def adicao(cls, valor: float):
-        cls._anterior = cls._registrador
-        cls._registrador += valor
+    def __init__(self):
+        self.registrador = 0 #Registrador para guardar os números utilizados
+        self.anterior = 0 # Numero anterior para salvar o número que estava
+
+    def adicao(self, valor: float):
+        ''' Método para adição'''
+        self.anterior = self.registrador
+        self.registrador += valor
         
-    @classmethod
-    def subtracao(cls, valor:float):
-        cls._anterior = cls._registrador
-        cls._registrador -= valor
+    def subtracao(self, valor:float):
+        ''' Método para subtração '''
+        self.anterior = self.registrador
+        self.registrador -= valor
 
-    @classmethod
-    def multiplicacao(cls, valor:float):
-        cls._anterior = cls._registrador
-        cls._registrador *= valor
+    def multiplicacao(self, valor:float):
+        ''' Método para multiplicação '''
+        self.anterior = self.registrador
+        self.registrador *= valor
 
-    @classmethod
-    def divisao(cls, valor:float):
-        cls._anterior = cls._registrador
-        cls._registrador /= valor
+    def divisao(self, valor:float):
+        ''' Método para divisão'''
+        self.anterior = self.registrador
+        self.registrador /= valor
 
-    @classmethod
-    def obterRegistrador(cls) -> float:
-        return cls._registrador
+    def obterRegistrador(self) -> float:
+        return self.registrador
         
-    @classmethod
-    def undo(cls):
-        cls._registrado = cls._anterior
+    def undo(self):
+        self.registrado = self.anterior
     
-    @classmethod
-    def limpar(cls):
-        cls._registrador = 0
-        cls._anterior = 0
+    def limpar(self):
+        self.registrador = 0
+        self.anterior = 0
      
-    @classmethod
-    def exibe(cls):
-        registrador = cls.obterRegistrador()
+    def exibe(self):
+        registrador = self.obterRegistrador()
         return round(registrador, 2)
