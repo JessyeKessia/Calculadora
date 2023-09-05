@@ -23,7 +23,7 @@ class InterfaceUsuario:
                 print("Valor errado. Digite novamente...")
 
     def exibir_menu(self) -> bool:
-        self.limpar_tela()
+        self.limpar()
         print("+--------------+")
         print(f"{self.calculadora.get_registrador(): >15}")
         print("+--------------+")
@@ -39,13 +39,13 @@ class InterfaceUsuario:
                 try:
                     self.calculadora.divisao(self._get_valor())
                 except CalculadoraErro:
-                    print("Impossível dividir por zero.")
+                    input("Impossível dividir por zero.\nPRESSIONE ENTER PARA CONTINUAR")
             case "*":
                 self.calculadora.multiplicacao(self._get_valor())
-            case "r":
-                self.calculadora.reset()
             case "d":
-                self.calculadora.desfazer()
+                self.calculadora.undo()
+            case "r":
+                self.calculadora.limpar()
             case "s":
                 print("Encerrando calculadora...")
                 return False
@@ -54,12 +54,16 @@ class InterfaceUsuario:
         
         return True
         
-    def limpar_tela(self):
-        os.system("cls")
+    def limpar(self):
+        if os.name == 'posix':
+            os.system('clear')
+        elif os.name == 'nt':
+            os.system('cls')
 
     def executar(self):
         while self.exibir_menu():
             pass
             
 if __name__ == "__main__":
-    InterfaceUsuario().executar()
+    calculadora = InterfaceUsuario()
+    calculadora.executar()
