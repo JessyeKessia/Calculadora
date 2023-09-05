@@ -1,48 +1,65 @@
-from Calculadora import Calculadora
+import os
+from calculadora import Calculadora, CalculadoraErro
 
-Calculadora = Calculadora()
+# Menu
+MENU_STR = """(+) somar
+(-) subtrair
+(/) dividir
+(*) multiplicar
+(r) resetar
+(d) desfazer
+(s) sair
+"""
 
-while True:
-    print('+--------------+')
-    print(f'|{Calculadora.exibe()}|')
-    print('+--------------+')
+class InterfaceUsuario:
+    def __init__(self):
+        self.calculadora = Calculadora()
 
-    print('(+) somar')
-    print('(-) subtrair')
-    print('(/) dividir')
-    print('(*) multiplicar')
-    print('(r) resetar')
-    print('(d) desfazer')
-    print('(s) sair')
-    print('---------------')
+    def _get_valor(self):
+        while True:
+            try:
+                return float(input("Valor: "))
+            except ValueError:
+                print("Valor errado. Digite novamente...")
 
-    escolha = input('Digite sua escolha: ').lower()
+    def exibir_menu(self) -> bool:
+        self.limpar_tela()
+        print("+--------------+")
+        print(f"{self.calculadora.get_registrador(): >15}")
+        print("+--------------+")
+        print(MENU_STR)
+        print("---------------")
+        operacao = input("Operação: ")
+        match operacao:
+            case "+":
+                self.calculadora.adicao(self._get_valor())
+            case "-":
+                self.calculadora.subtracao(self._get_valor())
+            case "/":
+                try:
+                    self.calculadora.divisao(self._get_valor())
+                except CalculadoraErro:
+                    print("Impossível dividir por zero.")
+            case "*":
+                self.calculadora.multiplicacao(self._get_valor())
+            case "r":
+                self.calculadora.reset()
+            case "d":
+                self.calculadora.desfazer()
+            case "s":
+                print("Encerrando calculadora...")
+                return False
+            case _:
+                print("Comando inválido.")
+        
+        return True
+        
+    def limpar_tela(self):
+        os.system("cls")
 
-    if escolha == '+':
-        valor = float(input('Digite o primeiro valor: '))
-        Calculadora.adicao(valor)
-
-    elif escolha == '-':
-        valor = float(input('Digite o primeiro valor: '))
-        Calculadora.subtracao(valor)
-
-    elif escolha == '/':
-        valor = float(input('Digite o primeiro valor: '))
-        Calculadora.divisao(valor)
-
-    elif escolha == '*':
-        valor = float(input('Digite o primeiro valor: '))
-        Calculadora.multiplicacao(valor)
-
-    elif escolha == 'r':
-        Calculadora.limpar()
-
-    elif escolha == 'd':
-        Calculadora.undo()
-
-    elif escolha == 's':
-        break
-
-    else:
-        print('Insira algo válido!')
-        continue
+    def executar(self):
+        while self.exibir_menu():
+            pass
+            
+if __name__ == "__main__":
+    InterfaceUsuario().executar()
